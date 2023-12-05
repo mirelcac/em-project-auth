@@ -13,7 +13,7 @@ mongoose.Promise = Promise;
 const port = process.env.PORT || 8080;
 const app = express();
 
-// Create mogoose model:
+// CREATE MONGOOSE MODEL //
 const User = mongoose.model('User', {
   name: {
     type: String,
@@ -33,6 +33,8 @@ const User = mongoose.model('User', {
   }
 });
 
+
+
 // MIDDLEWARE //
 // Middleware for authenticating users based on access token
 const authenticateUser = async (req, res, next) => {
@@ -51,8 +53,10 @@ const authenticateUser = async (req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
+
+
 // DEFINING ROUTES //
-// Endpoint 
+// Endpoint (edit later)
 app.get('/', (req, res) => {
   res.send('Hello Technigo!');
 });
@@ -69,6 +73,7 @@ app.post('/users', async (req, res) => {
   }
 })
 
+// Endpoint Secret message (remove later)
 app.get('/secrets', (req, res) => {
   res.json({ secret: 'Secret message!' });
 });
