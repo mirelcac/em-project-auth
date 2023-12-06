@@ -4,14 +4,18 @@ import mongoose from 'mongoose';
 import crypto from 'crypto'; //Library to create access token
 import bcrypt from 'bcrypt-nodejs'; //To hash our password
 
+
+// CONNECT TO DATABASE
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/auth';
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = Promise;
+
 
 // Defines the port the app will run on. Defaults to 8080, but can be overridden
 // when starting the server. Example command to overwrite PORT env variable value: PORT=9000 npm start
 const port = process.env.PORT || 8080;
 const app = express();
+
 
 // CREATE MONGOOSE MODEL //
 const User = mongoose.model('User', {
@@ -34,7 +38,6 @@ const User = mongoose.model('User', {
 });
 
 
-
 // MIDDLEWARE //
 // Middleware for authenticating users based on access token
 const authenticateUser = async (req, res, next) => {
@@ -45,14 +48,13 @@ const authenticateUser = async (req, res, next) => {
     next();
   } else {
     // If no user is found, respond with a 401 Unauthorized status and a JSON indicating logout
-    res.status(401).json({ loggedOut: true });
+    res.status(401).json({ error: 'Unauthorized access. Please log in.' });
   }
 }
 
 // Middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
-
 
 
 // DEFINING ROUTES //
@@ -69,15 +71,29 @@ app.post('/users', async (req, res) => {
     await user.save();     // Save the user to the database
     res.status(201).json({ id: user._id, accessToken: user.accessToken }) // Respond with user details and access token
   } catch (err) {
-    res.status(400).json({ message: 'ERROR! Could not create user', errors: err.errors }) // Handle errors during user creation
+    res.status(400).json({ message: 'Error creating user. Please check your input and try again.', errors: err.errors }) // Handle errors during user creation
   }
 })
 
-// Endpoint Secret message (remove later)
-app.get('/secrets', (req, res) => {
+// (!) authenticateUser - Ensures that the '/secrets' endpoint is accessible only to authenticated users by utilizing the authenticateUser middleware.
+// Endpoint Secret message 
+app.get('/secrets', authenticateUser, (req, res) => {
   res.json({ secret: 'Secret message!' });
 });
 
+// Endpoint for user authentication (to find the user)
+app.post('/sessions', async (req, res) => {
+  // Find a user in the database with the provided email
+  const user = await User.findOne({ email: req.body.email });
+  // Check if a user is found and if the provided password matches the stored hashed password
+  if (user && bcrypt.compareSync(req.body.password, user.password)) {
+    res.json({ userId: user._id, accessToken: user.accessToken }); // Respond with the user's ID and access token if authentication is successful
+  } else {
+    res.status(401).json({ error: 'Invalid email or password. Please try again.' }); // Respond with a JSON indicating that the user was not found
+  }
+});
+
+// NB! comment out later
 console.log(crypto.randomBytes(128).toString('hex'))
 
 // START THE SERVER //
