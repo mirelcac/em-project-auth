@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import crypto from 'crypto'; //Library to create access token
-import bcrypt from 'bcrypt-nodejs'; //To hash our password
+import bcrypt from 'bcrypt-nodejs'; //To hash our passwords
 
 
 // CONNECT TO DATABASE
