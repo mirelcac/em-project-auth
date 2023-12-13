@@ -5,6 +5,8 @@
     "postinstall": "npm install --prefix backend"
   },
   "dependencies": {
-    "bcrypt-nodejs": "^0.0.3"
+    "bcrypt": "^5.1.1",
+    "bcrypt-nodejs": "^0.0.3",
+    "zustand": "^4.4.7"
   }
 }
