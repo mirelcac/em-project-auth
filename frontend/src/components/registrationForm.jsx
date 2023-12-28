@@ -19,16 +19,34 @@ export const RegistrationForm = () => {
     };
 
     // Function to handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (validateForm()) {
-            // If the form is valid, perform form submission logic
-            console.log('Form submitted:', { name, email, password });
+            try {
+                // Make a POST request 
+                const response = await fetch('http://localhost:8081/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                    }),
+                });
+                // Parse the JSON response
+                const data = await response.json();
+                console.log('Form submitted successfully:', data);
+            } catch (error) {
+                console.error('Error submitting form:', error.message);
+            }
         } else {
-            // If the form is not valid, log a message indicating validation failure
             console.log('Form validation failed');
         }
     };
+
 
     return (
         <div>

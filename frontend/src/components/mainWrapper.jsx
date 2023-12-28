@@ -1,4 +1,4 @@
-import { RegistrationForm } from './registrationForm'; // Adjust the path accordingly
+import { RegistrationForm } from './registrationForm';
 
 export const MainWrapper = () => {
     return (

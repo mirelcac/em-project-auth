@@ -1,9 +1,7 @@
 import express from 'express';
-import cors from 'cors';
+import cors from 'cors'; // Security mechanism - defines how web pages in one domain interact with resources from another domain
 import mongoose from 'mongoose';
-import crypto from 'crypto'; //Library to create access token
-import bcrypt from 'bcrypt-nodejs'; //To hash our passwords
-
+import crypto from 'crypto';
 
 // CONNECT TO DATABASE
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/auth';
@@ -63,6 +61,7 @@ app.get('/', (req, res) => {
   res.send('Hello Technigo!');
 });
 
+
 // Endpoint to create a new user
 app.post('/users', async (req, res) => {
   try {
@@ -93,11 +92,9 @@ app.post('/sessions', async (req, res) => {
   }
 });
 
-// NB! comment out later
-console.log(crypto.randomBytes(128).toString('hex'))
+
 
 // START THE SERVER //
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-
