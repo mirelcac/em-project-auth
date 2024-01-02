@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors'; // Security mechanism - defines how web pages in one domain interact with resources from another domain
 import mongoose from 'mongoose';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 // CONNECT TO DATABASE
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/auth';
