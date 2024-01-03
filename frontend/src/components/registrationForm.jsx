@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import useAuthStore from './authStore';
+import { useHistory } from 'react-router-dom';
+import { useAuthStore } from './authStore';
 
 export const RegistrationForm = () => {
+
+    const history = useHistory();  // Initialize useHistory
+
     // State variables for form inputs and errors
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -37,14 +41,23 @@ export const RegistrationForm = () => {
                         password,
                     }),
                 });
+                // Check if the registration was successful
+                if (!response.ok) {
+                    throw new Error('Registration failed. Please try again.');
+                }
                 // Parse the JSON response
                 const data = await response.json();
                 // Update user and authentication state on successful registration
                 useAuthStore.setState({ user: data.user, accessToken: data.accessToken, isAuthenticated: true });
                 console.log('Form submitted successfully:', data);
                 // Handle successful registration
+
+                history.push('/login');
+                // Redirect to /login after successful registration
+
             } catch (error) {
                 console.error('Error submitting form:', error.message);
+                setErrors({ general: 'Registration failed. Please try again.' });
                 // Handle registration error (display error message, etc.)
             }
         } else {

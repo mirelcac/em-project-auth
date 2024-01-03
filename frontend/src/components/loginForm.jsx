@@ -1,8 +1,12 @@
+import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
-import useAuthStore from './authStore';
+import { useAuthStore } from './authStore';
 
 export const LoginForm = () => {
+    const history = useHistory(); // Initialize useHistory
+
     const { setUser } = useAuthStore();
+
     // State variables for form inputs and errors
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -36,6 +40,10 @@ export const LoginForm = () => {
                         password,
                     }),
                 });
+                // Check if the login was successful
+                if (!response.ok) {
+                    throw new Error('Login failed. Please try again.');
+                }
                 // Parse the JSON response
                 const data = await response.json();
 
@@ -47,8 +55,13 @@ export const LoginForm = () => {
                 setUser({ id: userId, name, email }, accessToken);
                 console.log('Login successful:', data);
                 // Handle successful login (update global state, redirect, etc.)
+
+                history.push('/secrets');  // // Redirect to /secrets after successful login)
+
             } catch (error) {
                 console.error('Error during login:', error.message);
+                setErrors({ general: 'Login failed. Please try again.' });
+
                 // Handle login error (display error message, etc.)
             }
         } else {
