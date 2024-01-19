@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import validator from 'validator';
 
 // Import the Schema class from the Mongoose library
 // Destructures the Schema class from the Mongoose library, allowing us to create a schema.
@@ -16,24 +17,16 @@ const userSchema = new Schema(
         },
         email: {
             type: String,
+            minlength: 4,
             required: true,
             unique: true,
+            validate: [validator.isEmail, 'Invalid email address']
         },
         // Define the 'password' field with a String data type
         password: {
             type: String,
             required: true,
-            minlength: 6,
-            validate: {
-                // Password requirements added
-                validator: function (password) {
-                    const hasNumber = /[0-9]/.test(password);
-                    const hasCapitalLetter = /[A-Z]/.test(password);
-                    const hasSpecialSign = /[!@#\$%\^&\*]/.test(password);
-                    return hasNumber && hasCapitalLetter && hasSpecialSign;
-                },
-                message: 'Password must contain at least one number, one capital letter, and one special character.'
-            }
+            minlength: 6
         },
         role: {
             type: String,
@@ -44,6 +37,7 @@ const userSchema = new Schema(
         timestamps: true,
     }
 );
+
 
 // Create a Mongoose model named 'UserModel' based on the 'userSchema' for the 'users' collection
 // This model is used to interact with the "users" collection in the MongoDB database. It allows you to perform CRUD operations on user documents and provides methods for data validation based on the schema.

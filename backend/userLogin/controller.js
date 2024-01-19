@@ -9,46 +9,45 @@ const generateToken = (id) => {
     });
 };
 
+// Password validation function
+const isValidPassword = (password) => {
+    const hasNumber = /[0-9]/.test(password);
+    const hasCapitalLetter = /[A-Z]/.test(password);
+    const hasSpecialSign = /[!@#$%^&*]/.test(password);
+    return hasNumber && hasCapitalLetter && hasSpecialSign && password.length >= 6;
+};
+
 // FUNCTION FOR USER REGISTRATION
 export const registerUserController = asyncHandler(async (req, res) => {
     // Extract email, username and password from the request body
     const { username, password, email } = req.body;
-    // In this try section of the try catch we will first do some conditional logic and then generate the newUser with a crypted password within the DB.
+
     try {
-        // 1st Condition
-        // Check wether all fields of registration logic are NOT [!email] inputted from the request.body object
+        // Check whether all fields of registration are inputted
         if (!username || !email || !password) {
-            // if so, set http status to a 400code
             res.status(400);
-            // and throw new error with some info
             throw new Error("Please add all fields");
         }
-        // 2nd Condition
-        // Check if the current user trying to register is using an usernam or email that matches with the same username or email in the database, so they would have to choose something diferent
-        const existingUser = await UserModel.findOne({
-            $or: [{ username }, { email }],
-        });
+
+        // Check if password meets criteria
+        if (!isValidPassword(password)) {
+            return res.status(400).json({ success: false, message: "Password must contain at least one number, one capital letter, and one special character, and be at least 6 characters long." });
+        }
+
+        // Check if the username or email already exists in the database
+        const existingUser = await UserModel.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             res.status(400);
-            throw new Error(
-                `User with ${existingUser.username === username ? "username" : "email"
-                } already exists`
-            );
+            throw new Error(`User with ${existingUser.username === username ? "username" : "email"} already exists`);
         }
 
         // Generate a salt and hash the user's password
         const salt = bcrypt.genSaltSync(10);
-
         const hashedPassword = bcrypt.hashSync(password, salt);
-        // Create a new user instance with the hashed password
-        const newUser = new UserModel({
-            username,
-            email,
-            password: hashedPassword,
-        });
 
-        // Description: Save the new user instance to the database
-        await newUser.save();
+        // Create a new user instance with the hashed password
+        const newUser = new UserModel({ username, email, password: hashedPassword });
+        await newUser.save(); // Save the new user instance to the database
 
         // Generate a JWT token for the new user
         const token = generateToken(newUser._id);
@@ -60,11 +59,15 @@ export const registerUserController = asyncHandler(async (req, res) => {
                 username: newUser.username,
                 email: newUser.email,
                 id: newUser._id,
-                token // Send the token to the user
-            },
+                token
+            }
         });
     } catch (e) {
-        // Handle any errors that occur during the registration process
+        if (e.name === 'ValidationError') {
+            // Handle Mongoose validation errors
+            return res.status(400).json({ success: false, message: e.message });
+        }
+        // Handle other types of errors
         res.status(500).json({ success: false, response: e.message });
     }
 });
