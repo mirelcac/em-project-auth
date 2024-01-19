@@ -33,27 +33,6 @@ export const connectDB = async () => {
         // Attempting to connect to MongoDB using the provided URL and options
         const conn = await mongoose.connect(process.env.MONGO_URL, mongooseOptions);
         // Logging a success message with the connected database host
-        console.log(`Local MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        // Logging the error if the connection fails
-        console.error("Local MongoDB connection error:", error);
-        // Exiting the application in case of connection failure
-        process.exit(1);
-    }
-};
-
-// CONNECT TO ATLAS DB
-export const connectAtlasDB = async () => {
-    // Check if the ATLAS_MONGO_URL environment variable is set
-    if (!process.env.ATLAS_MONGO_URL) {
-        console.error("ATLAS_MONGO_URL is not set in .env");
-        process.exit(1);
-    }
-
-    try {
-        // Attempting to connect to MongoDB Atlas using the provided URL and options
-        const conn = await mongoose.connect(process.env.ATLAS_MONGO_URL, mongooseOptions);
-        // Logging a success message with the connected database host
         console.log(`MongoDB Atlas Connected: ${conn.connection.host}`);
     } catch (error) {
         // Logging the error if the connection fails
