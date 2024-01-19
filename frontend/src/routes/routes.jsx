@@ -1,17 +1,15 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { RegistrationForm } from '../components/registrationForm';
-import { LoginForm } from '../components/loginForm';
-import { AuthPageContent } from '../components/authPageContent';
+import { Routes, Route } from "react-router-dom";
+import { HomePage } from '../components/homePage';
+import { RegisterPage } from '../components/registerPage';
+import { UserPage } from '../components/userPage';
+import { ProtectedRoute } from './protectRoute';
 
-
-export const Routes = () => {
+export const AppRoutes = () => {
     return (
-        <Router>
-            <Switch>
-                <Route path="/register" component={RegistrationForm} />
-                <Route path="/login" component={LoginForm} />
-                <Route path="/secrets" component={AuthPageContent} />
-            </Switch>
-        </Router>
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/userpage" element={<ProtectedRoute><UserPage /></ProtectedRoute>} />
+        </Routes>
     );
 };

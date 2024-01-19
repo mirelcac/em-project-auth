@@ -1,12 +1,64 @@
 import { create } from 'zustand';
 
-export const useAuthStore = create((set) => ({
+// Authentication
+const useAuthStore = create((set) => ({
+  token: localStorage.getItem('token') || null,
   user: null,
-  isAuthenticated: false,
-  accessToken: null,
-  setUser: (user, accessToken) =>
-    set({ user, accessToken, isAuthenticated: true }),
-  logout: () => set({ user: null, accessToken: null, isAuthenticated: false }),
+  error: null,
+
+  setToken: (token) => {
+    localStorage.setItem('token', token);
+    set({ token });
+  },
+
+  clearToken: () => {
+    localStorage.removeItem('token');
+    set({ token: null, user: null });
+  },
+
+  // User Login
+  login: async (username, password) => {
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.response || 'Login failed');
+      }
+      set({ user: data.response, token: data.response.token, error: null });
+      localStorage.setItem('token', data.response.token);
+    } catch (error) {
+      set({ error: error.message });
+    }
+  },
+
+  // User registration
+  register: async (username, password, email) => {
+    try {
+      const response = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, email })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.response || 'Registration failed');
+      }
+      set({ user: data.response, token: data.response.token, error: null });
+      localStorage.setItem('token', data.response.token);
+    } catch (error) {
+      set({ error: error.message });
+    }
+  },
+
+  // User Logout
+  logout: () => {
+    set({ user: null, token: null, error: null });
+    localStorage.removeItem('token');
+  }
 }));
 
-
+export default useAuthStore;
