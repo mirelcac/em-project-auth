@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthStore from './authStore';
 import { Link } from 'react-router-dom';
+import useAuthStore from './authStore';
+import styles from './homePage.module.css'
 
 export const HomePage = () => {
     const navigate = useNavigate();
@@ -37,10 +38,10 @@ export const HomePage = () => {
     };
 
     return (
-        <div>
-            <h1>Welcome to My App</h1>
-            <p>This is the home page of the app.</p>
-            <form onSubmit={handleSubmit}>
+        <div className={styles.wrapper}>
+            <h1 className={styles.h1}>Welcome to My App</h1>
+            <p>Please sign in!</p>
+            <form className={styles.form} onSubmit={handleSubmit}>
                 <input
                     name="username"
                     value={credentials.username}
@@ -60,7 +61,7 @@ export const HomePage = () => {
             </form>
             {localError && <p style={{ color: 'red' }}>{localError}</p>}
             <br />
-            <Link to="/register">Register</Link> {/* Link to the registration page */}
+            <Link className={styles.link} to="/register">Register</Link> {/* Link to the registration page */}
         </div>
     );
 };

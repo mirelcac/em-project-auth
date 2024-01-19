@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from './authStore';
+import styles from './registerPage.module.css'
 
 
 // User registration
@@ -38,10 +39,10 @@ export const RegisterPage = () => {
     };
 
     return (
-        <div>
-            <h1>Register</h1>
+        <div className={styles.wrapper}>
+            <h1 className={styles.h1}>Register</h1>
             {!registrationSuccess ? (
-                <form onSubmit={handleSubmit}>
+                <form className={styles.form} onSubmit={handleSubmit}>
                     <input name="username" value={formData.username} onChange={handleChange} placeholder="Username" required />
                     <input name="email" value={formData.email} onChange={handleChange} placeholder="Email" required />
                     <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" required />
@@ -52,7 +53,7 @@ export const RegisterPage = () => {
                 <p>Registration successful! Redirecting to login...</p>
             )}
             <br />
-            <Link to="/">Back to Home</Link>
+            <Link className={styles.link} to="/">Back to Home</Link>
         </div>
     );
 };
