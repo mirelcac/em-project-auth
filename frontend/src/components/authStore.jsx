@@ -1,4 +1,9 @@
 import { create } from 'zustand';
+import dotenv from "dotenv";
+dotenv.config();
+
+const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+
 
 // Authentication
 const useAuthStore = create((set) => ({
@@ -19,7 +24,7 @@ const useAuthStore = create((set) => ({
   // User Login
   login: async (username, password) => {
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -38,7 +43,7 @@ const useAuthStore = create((set) => ({
   // User registration
   register: async (username, password, email) => {
     try {
-      const response = await fetch('http://localhost:3000/register', {
+      const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, email })
