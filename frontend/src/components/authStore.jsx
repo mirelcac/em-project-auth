@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-//Access .env url
+//Access .env render url
 const API_URL = import.meta.env.VITE_BACKEND_API || 'http://localhost:3000';
 
 // Authentication
