@@ -4,7 +4,6 @@ dotenv.config();
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
-
 // Authentication
 const useAuthStore = create((set) => ({
   token: localStorage.getItem('token') || null,
