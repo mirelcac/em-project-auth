@@ -1,14 +1,15 @@
 # Project Auth API
 
-Replace this readme with your own information about your project.
-
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+Create a registration and sign in form, leading to a "secret page" that ony users who are logged in can see
+Frontend and backend working together
 
 ## The problem
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+There were some troubles along the way, including tokens and secrets.
+The main trouble in this project is deploying which we have really struggled with.
+Atlas DB worked well, but render and netlify have been tricky.
 
 ## View it live
 
-Frontend on netlify: 
+Frontend on netlify: https://em-authorization.netlify.app/
 Backend on render: https://em-authorization.onrender.com/
