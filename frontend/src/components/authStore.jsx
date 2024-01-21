@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-import dotenv from "dotenv";
-dotenv.config();
+
 
 const API_URL = import.meta.env.VITE_BACKEND_API || 'http://localhost:3000';
 
