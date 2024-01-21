@@ -2,12 +2,11 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+dotenv.config(); // Load and parse environment variables from the .env file
 import userRoutes from "./userLogin/routes";
 
 // Import database connection functions
 import { connectDB } from "./db";
-
-dotenv.config(); // Load and parse environment variables from the .env file
 
 // Retrieve the port number from environment variables or set default
 const port = process.env.PORT || 3000;
