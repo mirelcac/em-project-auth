@@ -8,12 +8,6 @@ import dotenv from "dotenv";
 // Execute the config function to load variables from .env file into process.env
 dotenv.config();
 
-// Configuration options for Mongoose (with deprecated options removed)
-const mongooseOptions = {
-    useNewUrlParser: true, // Use the new URL string parser
-    useUnifiedTopology: true // Use the new Server Discover and Monitoring engine
-};
-
 /**
  * Asynchronous function to connect to MongoDB.
  * This function tries to establish a connection with the MongoDB server
@@ -31,7 +25,7 @@ export const connectDB = async () => {
 
     try {
         // Attempting to connect to MongoDB using the provided URL and options
-        const conn = await mongoose.connect(process.env.MONGO_URL, mongooseOptions);
+        const conn = await mongoose.connect(process.env.MONGO_URL);
         // Logging a success message with the connected database host
         console.log(`MongoDB Atlas Connected: ${conn.connection.host}`);
     } catch (error) {
