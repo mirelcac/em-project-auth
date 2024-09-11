@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '24h' // Token expires in 24 hours
+        expiresIn: '24h' // Make sure token expires in 24 hours
     });
 };
 
@@ -19,7 +19,7 @@ const isValidPassword = (password) => {
 
 // FUNCTION FOR USER REGISTRATION
 export const registerUserController = asyncHandler(async (req, res) => {
-    // Extract email, username and password from the request body
+    // Extract email, username & password from the request body
     const { username, password, email } = req.body;
 
     try {
